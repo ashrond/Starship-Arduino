@@ -1,6 +1,6 @@
 // Starship Arduino
-// Lighting control program for starship models
-// GitHub Repository:  https://github.com/wilsonb/arduino/tree/master/libraries  
+// Arduino lighting control program for starship models
+// GitHub Repository: https://github.com/ashrond/Starship-Arduino
 // LedFader.h> http://gammon.com.au/blink
 // LedFlasher.h> http://gammon.com.au/blink
 
