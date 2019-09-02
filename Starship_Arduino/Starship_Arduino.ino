@@ -10,7 +10,7 @@
 //NOTE: if modifying or altering, verrify that the connected pin is PWM if fading is desired or else fading will not work
 const byte ModePin = 8;
 const byte StrobesPin = 7;
-const byte NavigationPin = 2;
+const byte NavigationPin = 11;
 const byte RunningLightPin = 9;   // (D9 PWM)
 const byte DeflectorPin = 6;   // (D6 PWM)
 const byte ImpulsePin = 5;   // (D3 PWM)
@@ -46,9 +46,9 @@ LedFlasher Strobes  (StrobesPin,  2000, 100,  true);
 LedFlasher Navigation (NavigationPin, 2300, 600,  true);
 
 
-const int buttonPin = 8; // One button connection to Pin 2, the other to GND
+const int buttonPin = ModePin; // One button connection to Pin 2, the other to GND
 
-const int NUMBER_OF_MODES = 4;
+const int NUMBER_OF_MODES = 5;
 
 int MODE = 0, buttonState = 0, lastButtonState = 0;
 
@@ -62,37 +62,60 @@ void setup() {
 
   // set up faders, flashers
   //STARTUP
-  ImpulseFader1.begin ();
-  DeflectorFader1.begin ();
-  NacelleFader1.begin ();
   Navigation.begin ();
   Strobes.begin ();
   RunningLightFader1.begin ();
   //IMPULSE MODE
-  ImpulseFader2.begin ();
-  DeflectorFader2.begin ();
-  NacelleFader2.begin ();
-  RunningLightFader2.begin ();
+ 
   //WARP MODE
-  ImpulseFader3.begin ();
-  DeflectorFader3.begin ();
-  NacelleFader3.begin ();
-  RunningLightFader3.begin ();
+  
 }
 
 void loop() {
+
   buttonState = digitalRead(buttonPin);
+
+  if ( 0 <= MODE <= 3 ) {
+    ImpulseFader1.begin ();
+  DeflectorFader1.begin ();
+  NacelleFader1.begin ();
+    ImpulseFader1.update ();
+    DeflectorFader1.update ();
+    NacelleFader1.update ();
+    Navigation.update ();
+    Strobes.update ();
+    RunningLightFader1.update ();
+    //IMPULSE MODE
+     ImpulseFader2.begin ();
+  DeflectorFader2.begin ();
+  NacelleFader2.begin ();
+  RunningLightFader2.begin ();
+    ImpulseFader2.update ();
+    DeflectorFader2.update ();
+    NacelleFader2.update ();
+    RunningLightFader2.update ();
+    //WARP MODE
+    ImpulseFader3.update ();
+    DeflectorFader3.update ();
+    NacelleFader3.update ();
+    RunningLightFader3.update ();
+  }
+
+
   if (buttonState != lastButtonState) {
-    if (MODE == NUMBER_OF_MODES) {
+    if (MODE == 9) {
       MODE = 0;
     }
     // do anything else you want here, eg resetting any variables or other counters.
   } else {  // same state as before
     return;
   }
-
+  MODE = MODE + 1;
   switch (MODE) {
     case 1:
+    break;
+    
+    case 2:
       RunningLightFader1.on();
       delay(130);
       RunningLightFader1.update ();
@@ -107,24 +130,24 @@ void loop() {
       delay(130);
       break;
 
-    case 2:
-      RunningLightFader1.update ();
+    case 3:
+      //RunningLightFader1.update ();
       delay(130);
       RunningLightFader2.on();
       delay(130);
-      DeflectorFader1.update ();
+      //DeflectorFader1.update ();
       delay(130);
       DeflectorFader2.on();
       delay(130);
-      ImpulseFader1.update ();
+     // ImpulseFader1.update ();
       delay(130);
       ImpulseFader2.on();
       delay(130);
-      NacelleFader1.on();
+     // NacelleFader1.on();
       delay(130);
       break;
 
-    case 3:
+    case 4:
       RunningLightFader2.on();
       delay(130);
       DeflectorFader2.update ();
@@ -141,34 +164,34 @@ void loop() {
       delay(130);
       break;
 
-    case 4:
+    case 5:
       RunningLightFader1.off();
-      RunningLightFader1.update ();
+     // RunningLightFader1.update ();
       RunningLightFader2.off();
-      RunningLightFader2.update ();
+     // RunningLightFader2.update ();
       RunningLightFader3.off();
-      RunningLightFader3.update ();
+     // RunningLightFader3.update ();
       // delay(3000);
       DeflectorFader1.off();
-      DeflectorFader1.update ();
+      //DeflectorFader1.update ();
       DeflectorFader2.off();
-      DeflectorFader2.update ();
+      //DeflectorFader2.update ();
       DeflectorFader3.off();
-      DeflectorFader3.update ();
+     // DeflectorFader3.update ();
       //  delay(3000);
       ImpulseFader1.off();
-      ImpulseFader1.update ();
+      //ImpulseFader1.update ();
       ImpulseFader2.off();
-      ImpulseFader2.update ();
+      //ImpulseFader2.update ();
       ImpulseFader3.off();
-      ImpulseFader3.update ();
+      //ImpulseFader3.update ();
       //  delay(3000);
       NacelleFader1.off();
-      NacelleFader1.update ();
+      //NacelleFader1.update ();
       NacelleFader2.off();
-      NacelleFader2.update ();
+      //NacelleFader2.update ();
       NacelleFader3.off();
-      NacelleFader3.update ();
+     // NacelleFader3.update ();
       break;
     default:
       //  this should never happen however a good safety just to turn on the lights for safety
