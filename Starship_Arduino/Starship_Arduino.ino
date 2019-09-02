@@ -10,7 +10,7 @@
 //NOTE: if modifying or altering, verrify that the connected pin is PWM if fading is desired or else fading will not work
 const byte ModePin = 8;
 const byte StrobesPin = 7;
-const byte NavigationPin = 11;
+const byte NavigationPin = 2;
 const byte RunningLightPin = 9;   // (D9 PWM)
 const byte DeflectorPin = 6;   // (D6 PWM)
 const byte ImpulsePin = 5;   // (D3 PWM)
@@ -64,11 +64,11 @@ void setup() {
   //STARTUP
   Navigation.begin ();
   Strobes.begin ();
-  RunningLightFader1.begin ();
+  //RunningLightFader1.begin ();
   //IMPULSE MODE
- 
+
   //WARP MODE
-  
+
 }
 
 void loop() {
@@ -76,20 +76,21 @@ void loop() {
   buttonState = digitalRead(buttonPin);
 
   if ( 0 <= MODE <= 3 ) {
+    Navigation.update ();   //leave alone, it works for some reason?
+    Strobes.update ();      //leave alone, it works for some reason?
+    RunningLightFader1.update ();
     ImpulseFader1.begin ();
-  DeflectorFader1.begin ();
-  NacelleFader1.begin ();
+    DeflectorFader1.begin ();
+    NacelleFader1.begin ();
     ImpulseFader1.update ();
     DeflectorFader1.update ();
     NacelleFader1.update ();
-    Navigation.update ();
-    Strobes.update ();
-    RunningLightFader1.update ();
+
     //IMPULSE MODE
-     ImpulseFader2.begin ();
-  DeflectorFader2.begin ();
-  NacelleFader2.begin ();
-  RunningLightFader2.begin ();
+    ImpulseFader2.begin ();
+    DeflectorFader2.begin ();
+    NacelleFader2.begin ();
+    RunningLightFader2.begin ();
     ImpulseFader2.update ();
     DeflectorFader2.update ();
     NacelleFader2.update ();
@@ -113,10 +114,11 @@ void loop() {
   MODE = MODE + 1;
   switch (MODE) {
     case 1:
-    break;
-    
+      delay(130);
+      break;
+
     case 2:
-      RunningLightFader1.on();
+
       delay(130);
       RunningLightFader1.update ();
       delay(130);
@@ -131,19 +133,20 @@ void loop() {
       break;
 
     case 3:
-      //RunningLightFader1.update ();
+      RunningLightFader1.off ();
       delay(130);
       RunningLightFader2.on();
+      RunningLightFader2.update();
       delay(130);
       //DeflectorFader1.update ();
       delay(130);
       DeflectorFader2.on();
       delay(130);
-     // ImpulseFader1.update ();
+      // ImpulseFader1.update ();
       delay(130);
       ImpulseFader2.on();
       delay(130);
-     // NacelleFader1.on();
+      // NacelleFader1.on();
       delay(130);
       break;
 
@@ -166,18 +169,18 @@ void loop() {
 
     case 5:
       RunningLightFader1.off();
-     // RunningLightFader1.update ();
+      // RunningLightFader1.update ();
       RunningLightFader2.off();
-     // RunningLightFader2.update ();
+      // RunningLightFader2.update ();
       RunningLightFader3.off();
-     // RunningLightFader3.update ();
+      // RunningLightFader3.update ();
       // delay(3000);
       DeflectorFader1.off();
       //DeflectorFader1.update ();
       DeflectorFader2.off();
       //DeflectorFader2.update ();
       DeflectorFader3.off();
-     // DeflectorFader3.update ();
+      // DeflectorFader3.update ();
       //  delay(3000);
       ImpulseFader1.off();
       //ImpulseFader1.update ();
@@ -191,7 +194,7 @@ void loop() {
       NacelleFader2.off();
       //NacelleFader2.update ();
       NacelleFader3.off();
-     // NacelleFader3.update ();
+      // NacelleFader3.update ();
       break;
     default:
       //  this should never happen however a good safety just to turn on the lights for safety
