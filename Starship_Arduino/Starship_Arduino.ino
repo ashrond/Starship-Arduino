@@ -67,8 +67,8 @@ void setup() {
 }
 
 void loop() {
-Navigation.update ();   //leave alone, it works for some reason?
-    Strobes.update ();      //leave alone, it works for some reason?
+  Navigation.update ();   //this should not be changed by button state
+  Strobes.update ();      //this should not be changed by button state
     
   buttonState = digitalRead(buttonPin);
 
