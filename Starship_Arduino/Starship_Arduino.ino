@@ -64,37 +64,27 @@ void setup() {
   //STARTUP
   Navigation.begin ();
   Strobes.begin ();
-  //RunningLightFader1.begin ();
-  //IMPULSE MODE
-
-  //WARP MODE
-
 }
 
 void loop() {
-
+Navigation.update ();   //leave alone, it works for some reason?
+    Strobes.update ();      //leave alone, it works for some reason?
+    
   buttonState = digitalRead(buttonPin);
 
   if ( 0 <= MODE <= 3 ) {
-    Navigation.update ();   //leave alone, it works for some reason?
-    Strobes.update ();      //leave alone, it works for some reason?
+    
     RunningLightFader1.update ();
     ImpulseFader1.begin ();
     DeflectorFader1.begin ();
     NacelleFader1.begin ();
-    ImpulseFader1.update ();
-    DeflectorFader1.update ();
-    NacelleFader1.update ();
-
+    
     //IMPULSE MODE
     ImpulseFader2.begin ();
     DeflectorFader2.begin ();
     NacelleFader2.begin ();
     RunningLightFader2.begin ();
-    ImpulseFader2.update ();
-    DeflectorFader2.update ();
-    NacelleFader2.update ();
-    RunningLightFader2.update ();
+    
     //WARP MODE
     ImpulseFader3.update ();
     DeflectorFader3.update ();
@@ -118,52 +108,33 @@ void loop() {
       break;
 
     case 2:
-
-      delay(130);
       RunningLightFader1.update ();
-      delay(130);
-      DeflectorFader1.on();
-      delay(130);
+            delay(130);
       DeflectorFader1.update ();
-      delay(130);
-      ImpulseFader1.on();
-      delay(130);
+            delay(130);
       ImpulseFader1.update ();
-      delay(130);
+            delay(130);
       break;
 
     case 3:
       RunningLightFader1.off ();
-      delay(130);
-      RunningLightFader2.on();
       RunningLightFader2.update();
-      delay(130);
-      //DeflectorFader1.update ();
-      delay(130);
-      DeflectorFader2.on();
-      delay(130);
-      // ImpulseFader1.update ();
-      delay(130);
-      ImpulseFader2.on();
-      delay(130);
-      // NacelleFader1.on();
-      delay(130);
+            delay(130);
+      DeflectorFader1.off ();
+      DeflectorFader2.update ();
+            delay(130);
+      ImpulseFader1.off ();
+      ImpulseFader2.update ();
       break;
 
     case 4:
-      RunningLightFader2.on();
+      DeflectorFader2.off ();
+      DeflectorFader3.update ();
       delay(130);
-      DeflectorFader2.update ();
+      ImpulseFader2.off ();
+      ImpulseFader3.update ();
       delay(130);
-      DeflectorFader3.on();
-      delay(130);
-      ImpulseFader2.update ();
-      delay(130);
-      ImpulseFader3.on();
-      delay(130);
-      NacelleFader2.update ();
-      delay(130);
-      NacelleFader3.on();
+      NacelleFader3.update ();
       delay(130);
       break;
 
