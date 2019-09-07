@@ -1,9 +1,6 @@
 // Version 36
-
 // Starship Model Light control for Arduino
-
 // Arduino Code for Uno
-
 // Additional libraries needed from:  https://github.com/wilsonb/arduino/tree/master/libraries
 
 #include <LedFader.h>
@@ -11,9 +8,7 @@
 
 //Pin Assignments
 //NOTE: if modifying or altering, verrify that the connected pin is PWM if fading is desired or else fading will not work
-
 const byte ModePin = 8;
-
 const byte StrobesPin = 7;
 const byte NavigationPin = 2;
 const byte RunningLightPin = 9;   // (D9 PWM)
@@ -35,13 +30,11 @@ LedFader RunningLightFader1   (RunningLightPin, 0,  10, 2000, false,  true);
 LedFader DeflectorFader1      (DeflectorPin,  0,  30, 8000, false, true);
 LedFader ImpulseFader1      (ImpulsePin,  0,  30, 300,  false,  false);
 LedFader NacelleFader1      (NacellePin,  0,  45, 30000,  false,  true);
-
 //__________________________IMPULSE MODE________________________________
 LedFader RunningLightFader2    (RunningLightPin, 0,  50, 1000, false,  true);
 LedFader DeflectorFader2      (DeflectorPin,  0,  80, 8000, false, true);
 LedFader ImpulseFader2     (ImpulsePin,  15,  45, 5, false,  false);
 LedFader NacelleFader2     (NacellePin,  45,  100,  30000,  false,  true);
-
 //____________________________WARP MODE_________________________________
 LedFader RunningLightFader3    (RunningLightPin, 0,  10, 1000, false,  true);
 LedFader DeflectorFader3      (DeflectorPin,  0,  50, 8000, false, true);
@@ -52,57 +45,51 @@ LedFader NacelleFader3     (NacellePin,  100,  255,  30000,  false,  true);
 LedFlasher Strobes  (StrobesPin,  2000, 100,  true);
 LedFlasher Navigation (NavigationPin, 2300, 600,  true);
 
-const int buttonPin = ModePin; // One button connection to Pin 8, the other to GND
+
+const int buttonPin = ModePin; // One button connection to Pin 2, the other to GND
+
 const int NUMBER_OF_MODES = 5;
+
 int MODE = 0, buttonState = 0, lastButtonState = 0;
 
 void setup() {
 
-  pinMode (buttonPin, INPUT_PULLUP);
+  pinMode(buttonPin, INPUT_PULLUP);
   pinMode (RunningLightPin, OUTPUT);
   pinMode (DeflectorPin, OUTPUT);
   pinMode (ImpulsePin, OUTPUT);
   pinMode (NacellePin, OUTPUT);
 
   // set up faders, flashers
-
   //STARTUP
-
   Navigation.begin ();
   Strobes.begin ();
-
-  //IMPULSE MODE
-
-  //WARP MODE
-
-
 }
 
 void loop() {
-
+  Navigation.update ();   //this should not be changed by button state
+  Strobes.update ();      //this should not be changed by button state
+    
   buttonState = digitalRead(buttonPin);
 
   if ( 0 <= MODE <= 3 ) {
-
-	Navigation.update ();   //this should not be changed by button state
-	Strobes.update ();      //this should not be changed by button state
     
-    RunningLightFader1.begin ();
+    RunningLightFader1.update ();
     ImpulseFader1.begin ();
     DeflectorFader1.begin ();
     NacelleFader1.begin ();
     
     //IMPULSE MODE
-    RunningLightFader2.begin ();
     ImpulseFader2.begin ();
     DeflectorFader2.begin ();
     NacelleFader2.begin ();
-        
+    RunningLightFader2.begin ();
+    
     //WARP MODE
-    RunningLightFader3.begin ();
-    ImpulseFader3.begin ();
-    DeflectorFader3.begin ();
-    NacelleFader3.begin ();
+    ImpulseFader3.update ();
+    DeflectorFader3.update ();
+    NacelleFader3.update ();
+    RunningLightFader3.update ();
   }
 
 
@@ -110,16 +97,12 @@ void loop() {
     if (MODE == 9) {
       MODE = 0;
     }
-
     // do anything else you want here, eg resetting any variables or other counters.
   } else {  // same state as before
     return;
   }
-
   MODE = MODE + 1;
-
   switch (MODE) {
-
     case 1:
       delay(130);
       break;
@@ -147,12 +130,12 @@ void loop() {
     case 4:
       DeflectorFader2.off ();
       DeflectorFader3.update ();
-          delay(130);
+      delay(130);
       ImpulseFader2.off ();
       ImpulseFader3.update ();
-          delay(130);
+      delay(130);
       NacelleFader3.update ();
-          delay(130);
+      delay(130);
       break;
 
     case 5:
@@ -184,7 +167,6 @@ void loop() {
       NacelleFader3.off();
       // NacelleFader3.update ();
       break;
-	  
     default:
       //  this should never happen however a good safety just to turn on the lights for safety
       //  hardware, memory corruption could happen.  Let's make it same as case high beam
