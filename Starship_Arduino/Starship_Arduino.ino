@@ -46,7 +46,7 @@ LedFlasher Strobes  (StrobesPin,  2000, 100,  true);
 LedFlasher Navigation (NavigationPin, 2300, 600,  true);
 
 
-const int buttonPin = ModePin; // One button connection to Pin 2, the other to GND
+const int buttonPin = ModePin; // One button connection to Pin 8, the other to GND
 
 const int NUMBER_OF_MODES = 5;
 
@@ -64,7 +64,7 @@ void setup() {
   //STARTUP
   Navigation.begin ();
   Strobes.begin ();
-  RunningLightFader1.begin ();
+  
   //IMPULSE MODE
  
   //WARP MODE
