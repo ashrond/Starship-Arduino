@@ -58,8 +58,8 @@ void setup() {
 
 // set up faders, flashers
   //STARTUP
-  Navigation.begin ();
-  Strobes.begin ();
+    Navigation.begin ();
+    Strobes.begin ();
   
   //IMPULSE MODE
  
@@ -68,8 +68,8 @@ void setup() {
 }
 
 void loop() {
- Navigation.update ();
- Strobes.update ();
+ //Navigation.update ();
+// Strobes.update ();
   buttonState = digitalRead(buttonPin);
 
   if ( 0 <= MODE <= 3 ) {
@@ -78,19 +78,15 @@ void loop() {
     NacelleFader1.begin ();
     RunningLightFader1.update ();
     //IMPULSE MODE
-     ImpulseFader2.begin ();
-  DeflectorFader2.begin ();
-  NacelleFader2.begin ();
-  RunningLightFader2.begin ();
-    ImpulseFader2.update ();
-    DeflectorFader2.update ();
-    NacelleFader2.update ();
-    RunningLightFader2.update ();
+      ImpulseFader2.update ();
+      DeflectorFader2.update ();
+      NacelleFader2.update ();
+      RunningLightFader2.update ();
     //WARP MODE
-    ImpulseFader3.update ();
-    DeflectorFader3.update ();
-    NacelleFader3.update ();
-    RunningLightFader3.update ();
+        ImpulseFader3.update ();
+        DeflectorFader3.update ();
+        NacelleFader3.update ();
+        RunningLightFader3.update ();
   }
 
 
