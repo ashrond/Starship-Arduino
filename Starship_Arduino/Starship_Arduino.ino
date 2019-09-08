@@ -68,14 +68,14 @@ void setup() {
 }
 
 void loop() {
- //Navigation.update ();
-// Strobes.update ();
+ Navigation.update ();
+ Strobes.update ();
   buttonState = digitalRead(buttonPin);
 
   if ( 0 <= MODE <= 3 ) {
     ImpulseFader1.begin ();
-    DeflectorFader1.begin ();
-    NacelleFader1.begin ();
+    DeflectorFader1.update ();
+    NacelleFader1.update ();
     RunningLightFader1.update ();
     //IMPULSE MODE
       ImpulseFader2.update ();
