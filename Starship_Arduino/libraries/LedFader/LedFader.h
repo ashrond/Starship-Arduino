@@ -12,7 +12,7 @@ class LedFader
               const byte maxValue, 
               const unsigned long msPerCycle,
               const bool active = true,
-              const bool stopWhenOn = false);
+              const bool stopWhenOn = true);
        
     void begin ();
     void update ();
