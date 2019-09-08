@@ -15,13 +15,16 @@ const byte RunningLightPin = 9;   // (D9 PWM)
 const byte DeflectorPin = 6;   // (D6 PWM)
 const byte ImpulsePin = 5;   // (D3 PWM)
 const byte NacellePin = 3;   // (D5 PWM)
+  const int buttonPin = ModePin; // One button connection to Pin 8, the other to GND
+  const int NUMBER_OF_MODES = 5;
 
 // Definitions
-//int brightness = 0;
-//int fadeAmount = 5;
-int State = 0;  //integer to hold current State
-int old = 0;    //integer to hold last State
-int buttonPoll = 0;  //integer to hold button State
+  int brightness = 0;
+  int fadeAmount = 5;
+  int State = 0;  //integer to hold current State
+  int old = 0;    //integer to hold last State
+  int buttonPoll = 0;  //integer to hold button State
+  int MODE = 0, buttonState = 0, lastButtonState = 0;
 
 // Faders pin,min,max,millis on?,stop?
 // Faders                           pin       min | max | millis | on? | stop?
@@ -44,13 +47,6 @@ LedFader NacelleFader3     (NacellePin,  100,  255,  30000,  true,  true);
 // Flashers pin,off-time,on-time,on?
 LedFlasher Strobes  (StrobesPin,  2000, 100,  true);
 LedFlasher Navigation (NavigationPin, 2300, 600,  true);
-
-
-const int buttonPin = ModePin; // One button connection to Pin 8, the other to GND
-
-const int NUMBER_OF_MODES = 5;
-
-int MODE = 0, buttonState = 0, lastButtonState = 0;
 
 void setup() {
 
@@ -77,9 +73,6 @@ void loop() {
   buttonState = digitalRead(buttonPin);
 
   if ( 0 <= MODE <= 3 ) {
-  ImpulseFader1.on ();
-  DeflectorFader1.on ();
-  NacelleFader1.on ();
     ImpulseFader1.begin ();
     DeflectorFader1.begin ();
     NacelleFader1.begin ();
@@ -112,23 +105,19 @@ void loop() {
   MODE = MODE + 1;
   switch (MODE) {
     case 1:
-      RunningLightFader1.on ();
-         //delay(50);
-     // RunningLightFader1.begin ();
           delay(10);
-            RunningLightFader1.update ();
     break;
     
     case 2:
-      RunningLightFader1.on ();
+      //RunningLightFader1.on ();
          delay(50);
       RunningLightFader1.begin ();
          delay(50);
-      DeflectorFader1.on ();
+      //DeflectorFader1.on ();
          delay(50);
       DeflectorFader1.begin ();
          delay(50);
-      ImpulseFader1.on ();
+      //ImpulseFader1.on ();
          delay(50);
       ImpulseFader1.begin ();
          delay(50);
