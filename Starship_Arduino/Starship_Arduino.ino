@@ -8,23 +8,23 @@
 
 //Pin Assignments
 //NOTE: if modifying or altering, verrify that the connected pin is PWM if fading is desired or else fading will not work
-const byte ModePin = 8;
-const byte StrobesPin = 7;
-const byte NavigationPin = 2;
-const byte RunningLightPin = 9;   // (D9 PWM)
-const byte DeflectorPin = 6;   // (D6 PWM)
-const byte ImpulsePin = 5;   // (D3 PWM)
-const byte NacellePin = 3;   // (D5 PWM)
-  const int buttonPin = ModePin; // One button connection to Pin 8, the other to GND
-  const int NUMBER_OF_MODES = 5;
+  const byte ModePin = 8;
+  const byte StrobesPin = 7;
+  const byte NavigationPin = 2;
+  const byte RunningLightPin = 9;   // (D9 PWM)
+  const byte DeflectorPin = 6;      // (D6 PWM)
+  const byte ImpulsePin = 5;        // (D3 PWM)
+  const byte NacellePin = 3;        // (D5 PWM)
 
 // Definitions
-  int brightness = 0;
-  int fadeAmount = 5;
+  //int brightness = 0;
+  //int fadeAmount = 5;
   int State = 0;  //integer to hold current State
   int old = 0;    //integer to hold last State
   int buttonPoll = 0;  //integer to hold button State
   int MODE = 0, buttonState = 0, lastButtonState = 0;
+    const int buttonPin = ModePin; // One button connection to Pin 8, the other to GND
+    const int NUMBER_OF_MODES = 5;
 
 // Faders pin,min,max,millis on?,stop?
 // Faders                           pin       min | max | millis | on? | stop?
@@ -73,7 +73,7 @@ void loop() {
   buttonState = digitalRead(buttonPin);
 
   if ( 0 <= MODE <= 3 ) {
-    ImpulseFader1.begin ();
+    ImpulseFader1.update ();
     DeflectorFader1.update ();
     NacelleFader1.update ();
     RunningLightFader1.update ();
@@ -121,24 +121,19 @@ void loop() {
 
     case 3:
       RunningLightFader1.off ();
-         delay(50);
-      RunningLightFader2.on();
-         delay(50);
+        RunningLightFader2.on();
+         delay(100);
       RunningLightFader2.update();
-         delay(50);
-      DeflectorFader1.off ();
-         delay(50);
+        DeflectorFader1.off ();
+         delay(100);
       DeflectorFader2.on();
-         delay(50);
-      DeflectorFader2.update();
-         delay(50);
+        DeflectorFader2.update();
+         delay(100);
       ImpulseFader1.off ();
-         delay(50);
-      ImpulseFader2.on();
-         delay(50);   
+        ImpulseFader2.on();
+         delay(100);
       ImpulseFader2.update();
-         delay(50);
-      NacelleFader2.update();
+        NacelleFader2.update();
       break;
 
     case 4:
