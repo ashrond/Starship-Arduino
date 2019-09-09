@@ -11,11 +11,11 @@
 const byte ModePin = 8;
 const byte StrobesPin = 7;
 const byte NavigationPin = 2;
-const byte RunningLightPin = 9;   // (D9 PWM)
-const byte DeflectorPin = 6;      // (D6 PWM)
-const byte ImpulsePin = 5;        // (D3 PWM)
-const byte NacellePin = 3;        // (D5 PWM)
-const byte TestPin = 13;        // (D5 PWM)
+const byte RunningLightPin = 9;   // (PWM)
+const byte DeflectorPin = 6;      // (PWM)
+const byte ImpulsePin = 5;        // (PWM)
+const byte NacellePin = 3;        // (PWM)
+const byte TestPin = 13;          // (PWM)
 
 // Definitions
 //int brightness = 0;
@@ -48,13 +48,12 @@ LedFader NacelleFader3     (NacellePin,  100,  255,  30000,  true,  true);
 // Flashers pin,off-time,on-time,on?
 LedFlasher Strobes  (StrobesPin,  2000, 100,  true);
 LedFlasher Navigation (NavigationPin, 2300, 600,  true);
-LedFlasher Test (TestPin, 2300, 600,  true);
 
 // enumerate states
 enum eLightStates { eOff = 0, eFirst, eSecond, eThird, eFourth, eFifth, eMaxState };
 
 void setup() {
-
+MODE = 0; buttonState = 0; lastButtonState = 0;
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode (RunningLightPin, OUTPUT);
   pinMode (DeflectorPin, OUTPUT);
@@ -98,7 +97,9 @@ void loop() {
   NacelleFader2.update();
   NacelleFader3.update();
 
-  if (buttonState != lastButtonState) {
+  //Setup Case
+  // if ( eOff < MODE && MODE < eMaxState ) {
+ if (buttonState != lastButtonState) {
     if (MODE == eMaxState) {
       MODE = eFirst;
     }
@@ -106,8 +107,7 @@ void loop() {
     lastButtonState = buttonState;
     return;
   }
-  //Setup Case
-  // if ( eOff < MODE && MODE < eMaxState ) {
+  
   switch (MODE) {
     case eFirst:
       digitalWrite(TestPin,LOW); 
@@ -152,7 +152,7 @@ void loop() {
       break;
 
     case eFifth:
-          digitalWrite(TestPin,HIGH); 
+      digitalWrite(TestPin,HIGH); 
       RunningLightFader1.off();
       RunningLightFader2.off();
       RunningLightFader3.off();
@@ -170,6 +170,18 @@ void loop() {
     default:
       //  this should never happen however a good safety just to turn on the lights for safety
       //  hardware, memory corruption could happen.  Let's make it same as case high beam
+      RunningLightFader1.off();
+      RunningLightFader2.off();
+      RunningLightFader3.off();
+      DeflectorFader1.off();
+      DeflectorFader2.off();
+      DeflectorFader3.off();
+      ImpulseFader1.off();
+      ImpulseFader2.off();
+      ImpulseFader3.off();
+      NacelleFader1.off();
+      NacelleFader2.off();
+      NacelleFader3.off();
       break;
       //  }
   }
