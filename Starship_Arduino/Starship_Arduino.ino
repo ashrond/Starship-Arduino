@@ -56,101 +56,64 @@ void setup() {
   pinMode (ImpulsePin, OUTPUT);
   pinMode (NacellePin, OUTPUT);
 
-// set up faders, flashers
-  //STARTUP
+// Start up faders, flashers
     Navigation.begin ();
     Strobes.begin ();
-  
-  //IMPULSE MODE
- 
-  //WARP MODE
-  
-}
+      RunningLightFader1.begin();
+      RunningLightFader2.begin();
+      RunningLightFader3.begin();
+        DeflectorFader1.begin();
+        DeflectorFader2.begin();
+        DeflectorFader3.begin();
+          ImpulseFader1.begin();
+          ImpulseFader2.begin();
+          ImpulseFader3.begin();
+            NacelleFader1.begin();
+            NacelleFader2.begin();
+            NacelleFader3.begin();
 
-void loop() {
- Navigation.update ();
- Strobes.update ();
-  buttonState = digitalRead(buttonPin);
-
-  if ( 0 <= MODE <= 3 ) {
-    ImpulseFader1.update ();
-    DeflectorFader1.update ();
-    NacelleFader1.update ();
-    RunningLightFader1.update ();
-    //IMPULSE MODE
-      ImpulseFader2.update ();
-      DeflectorFader2.update ();
-      NacelleFader2.update ();
-      RunningLightFader2.update ();
-    //WARP MODE
-        ImpulseFader3.update ();
-        DeflectorFader3.update ();
-        NacelleFader3.update ();
-        RunningLightFader3.update ();
-  }
-
-
-  if (buttonState != lastButtonState) {
-    if (MODE == 9) {
-      MODE = 0;
-    }
-    // do anything else you want here, eg resetting any variables or other counters.
-  } else {  // same state as before
-    return;
-  }
-  MODE = MODE + 1;
+//Setup Case
+if ( 0 <= MODE <= 3 ) {
   switch (MODE) {
     case 1:
           delay(10);
     break;
     
     case 2:
-      //RunningLightFader1.on ();
-         delay(50);
-      RunningLightFader1.begin ();
-         delay(50);
-      //DeflectorFader1.on ();
-         delay(50);
-      DeflectorFader1.begin ();
-         delay(50);
-      //ImpulseFader1.on ();
-         delay(50);
-      ImpulseFader1.begin ();
-         delay(50);
+      RunningLightFader1.on();  
+         delay(130);
+      DeflectorFader1.on();
+         delay(130);
+      ImpulseFader1.on();
+         delay(130);
       break;
 
     case 3:
-      RunningLightFader1.off ();
+      RunningLightFader1.off();
         RunningLightFader2.on();
-         delay(100);
-      RunningLightFader2.update();
-        DeflectorFader1.off ();
-         delay(100);
-      DeflectorFader2.on();
-        DeflectorFader2.update();
-         delay(100);
-      ImpulseFader1.off ();
+         delay(130);
+      DeflectorFader1.off();
+    DeflectorFader2.on();
+         delay(130);
+      ImpulseFader1.off();
         ImpulseFader2.on();
-         delay(100);
-      ImpulseFader2.update();
-        NacelleFader2.update();
+         delay(130);
+      NacelleFader1.off();
+        NacelleFader2.on();
       break;
 
     case 4:
-      RunningLightFader2.on();
-      delay(130);
-      DeflectorFader2.update ();
-      delay(130);
-      DeflectorFader3.on();
-      delay(130);
-      ImpulseFader2.update ();
-      delay(130);
-      ImpulseFader3.on();
-      delay(130);
-      NacelleFader2.update ();
-      delay(130);
-      NacelleFader3.on();
-      delay(130);
+      RunningLightFader2.off();
+        RunningLightFader3.on();
+         delay(130);
+      DeflectorFader2.off();
+    DeflectorFader3.on();
+         delay(130);
+      ImpulseFader2.off();
+        ImpulseFader3.on();
+         delay(130);
+      NacelleFader2.off();
+        NacelleFader3.on();
       break;
 
     case 5:
@@ -172,7 +135,40 @@ void loop() {
       //  this should never happen however a good safety just to turn on the lights for safety
       //  hardware, memory corruption could happen.  Let's make it same as case high beam
       break;
+      }
+    }
   }
-  // update faders, flashers
+
+void loop() {
+// Button read update
+ buttonState = digitalRead(buttonPin);
+  
+// Update faders, flashers
+   Navigation.update ();
+   Strobes.update ();
+      RunningLightFader1.update();
+      RunningLightFader2.update();
+      RunningLightFader3.update();
+        DeflectorFader1.update();
+        DeflectorFader2.update();
+        DeflectorFader3.update();
+          ImpulseFader1.update();
+          ImpulseFader2.update();
+          ImpulseFader3.update();
+            NacelleFader1.update();
+            NacelleFader2.update();
+            NacelleFader3.update();
+            
   lastButtonState = buttonState;
-}
+  
+    if (buttonState != lastButtonState) {
+    if (MODE == 9) {
+      MODE = 0;
+    }
+    // do anything else you want here, eg resetting any variables or other counters.
+  } else {  // same state as before
+    return;
+  }
+  MODE = MODE + 1;
+  
+} // end of loop
