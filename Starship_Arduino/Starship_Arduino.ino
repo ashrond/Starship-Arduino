@@ -15,6 +15,7 @@ const byte RunningLightPin = 9;   // (D9 PWM)
 const byte DeflectorPin = 6;      // (D6 PWM)
 const byte ImpulsePin = 5;        // (D3 PWM)
 const byte NacellePin = 3;        // (D5 PWM)
+const byte TestPin = 13;        // (D5 PWM)
 
 // Definitions
 //int brightness = 0;
@@ -24,7 +25,7 @@ int old = 0;    //integer to hold last State
 int buttonPoll = 0;  //integer to hold button State
 int MODE = 0, buttonState = 0, lastButtonState = 0;
 const int buttonPin = ModePin; // One button connection to Pin 8, the other to GND
-const int NUMBER_OF_MODES = 5;
+
 
 // Faders pin,min,max,millis on?,stop?
 // Faders                           pin       min | max | millis | on? | stop?
@@ -47,6 +48,7 @@ LedFader NacelleFader3     (NacellePin,  100,  255,  30000,  true,  true);
 // Flashers pin,off-time,on-time,on?
 LedFlasher Strobes  (StrobesPin,  2000, 100,  true);
 LedFlasher Navigation (NavigationPin, 2300, 600,  true);
+LedFlasher Test (TestPin, 2300, 600,  true);
 
 // enumerate states
 enum eLightStates { eOff = 0, eFirst, eSecond, eThird, eFourth, eFifth, eMaxState };
@@ -97,7 +99,7 @@ void loop() {
   NacelleFader3.update();
 
   if (buttonState != lastButtonState) {
-    if (MODE == eMaxState - 1) {
+    if (MODE == eMaxState) {
       MODE = eFirst;
     }
   } else {  // same state as before
@@ -105,69 +107,71 @@ void loop() {
     return;
   }
   //Setup Case
-  if ( eOff < MODE && MODE < eMaxState ) {
-    switch (MODE) {
-      case eFirst:
-        delay(10);
-        break;
+  // if ( eOff < MODE && MODE < eMaxState ) {
+  switch (MODE) {
+    case eFirst:
+      digitalWrite(TestPin,LOW); 
+      delay(10);
+      break;
 
-      case eSecond:
-        RunningLightFader1.on();
-        delay(130);
-        DeflectorFader1.on();
-        delay(130);
-        ImpulseFader1.on();
-        delay(130);
-        break;
+    case eSecond:
+      RunningLightFader1.on();
+      delay(130);
+      DeflectorFader1.on();
+      delay(130);
+      ImpulseFader1.on();
+      delay(130);
+      break;
 
-      case eThird:
-        RunningLightFader1.off();
-        RunningLightFader2.on();
-        delay(130);
-        DeflectorFader1.off();
-        DeflectorFader2.on();
-        delay(130);
-        ImpulseFader1.off();
-        ImpulseFader2.on();
-        delay(130);
-        NacelleFader1.off();
-        NacelleFader2.on();
-        break;
+    case eThird:
+      RunningLightFader1.off();
+      RunningLightFader2.on();
+      delay(130);
+      DeflectorFader1.off();
+      DeflectorFader2.on();
+      delay(130);
+      ImpulseFader1.off();
+      ImpulseFader2.on();
+      delay(130);
+      NacelleFader1.off();
+      NacelleFader2.on();
+      break;
 
-      case eFourth:
-        RunningLightFader2.off();
-        RunningLightFader3.on();
-        delay(130);
-        DeflectorFader2.off();
-        DeflectorFader3.on();
-        delay(130);
-        ImpulseFader2.off();
-        ImpulseFader3.on();
-        delay(130);
-        NacelleFader2.off();
-        NacelleFader3.on();
-        break;
+    case eFourth:
+      RunningLightFader2.off();
+      RunningLightFader3.on();
+      delay(130);
+      DeflectorFader2.off();
+      DeflectorFader3.on();
+      delay(130);
+      ImpulseFader2.off();
+      ImpulseFader3.on();
+      delay(130);
+      NacelleFader2.off();
+      NacelleFader3.on();
+      break;
 
-      case eFifth:
-        RunningLightFader1.off();
-        RunningLightFader2.off();
-        RunningLightFader3.off();
-        DeflectorFader1.off();
-        DeflectorFader2.off();
-        DeflectorFader3.off();
-        ImpulseFader1.off();
-        ImpulseFader2.off();
-        ImpulseFader3.off();
-        NacelleFader1.off();
-        NacelleFader2.off();
-        NacelleFader3.off();
-        break;
+    case eFifth:
+          digitalWrite(TestPin,HIGH); 
+      RunningLightFader1.off();
+      RunningLightFader2.off();
+      RunningLightFader3.off();
+      DeflectorFader1.off();
+      DeflectorFader2.off();
+      DeflectorFader3.off();
+      ImpulseFader1.off();
+      ImpulseFader2.off();
+      ImpulseFader3.off();
+      NacelleFader1.off();
+      NacelleFader2.off();
+      NacelleFader3.off();
+      break;
 
-      default:
-        //  this should never happen however a good safety just to turn on the lights for safety
-        //  hardware, memory corruption could happen.  Let's make it same as case high beam
-        break;
-    }
+    default:
+      //  this should never happen however a good safety just to turn on the lights for safety
+      //  hardware, memory corruption could happen.  Let's make it same as case high beam
+      break;
+      //  }
   }
   lastButtonState = buttonState;
   MODE = MODE + 1;
