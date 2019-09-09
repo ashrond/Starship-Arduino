@@ -31,16 +31,16 @@ const int buttonPin = ModePin; // One button connection to Pin 8, the other to G
 // Faders                           pin       min | max | millis | on? | stop?
 //__________________________STARTUP MODE________________________________
 LedFader RunningLightFader1   (RunningLightPin, 0,  10, 2000, true,  true);
-LedFader DeflectorFader1      (DeflectorPin,  0,  30, 8000, true, true);
-LedFader ImpulseFader1      (ImpulsePin,  0,  30, 300,  false,  false);
+LedFader DeflectorFader1      (DeflectorPin,  0,  10, 8000, true, true);
+LedFader ImpulseFader1      (ImpulsePin,  0,  20, 300,  false,  false);
 LedFader NacelleFader1      (NacellePin,  0,  45, 30000,  true,  true);
 //__________________________IMPULSE MODE________________________________
-LedFader RunningLightFader2    (RunningLightPin, 0,  50, 1000, true,  true);
-LedFader DeflectorFader2      (DeflectorPin,  0,  80, 8000, true, true);
-LedFader ImpulseFader2     (ImpulsePin,  15,  45, 5, false,  false);
+LedFader RunningLightFader2    (RunningLightPin, 0,  80, 1000, true,  true);
+LedFader DeflectorFader2      (DeflectorPin,  0,  150, 8000, true, true);
+LedFader ImpulseFader2     (ImpulsePin,  15,  150, 15, false,  false);
 LedFader NacelleFader2     (NacellePin,  45,  100,  30000,  true,  true);
 //____________________________WARP MODE_________________________________
-LedFader RunningLightFader3    (RunningLightPin, 0,  10, 1000, true,  true);
+LedFader RunningLightFader3    (RunningLightPin, 0,  30, 1000, true,  true);
 LedFader DeflectorFader3      (DeflectorPin,  0,  50, 8000, true, true);
 LedFader ImpulseFader3     (ImpulsePin,  10,  25, 10000, false,  false);
 LedFader NacelleFader3     (NacellePin,  100,  255,  30000,  true,  true);
@@ -124,31 +124,31 @@ void loop() {
       break;
 
     case eThird:
-      RunningLightFader1.off();
       RunningLightFader2.on();
-      delay(130);
-      DeflectorFader1.off();
+      RunningLightFader1.off();
+      delay(5);
       DeflectorFader2.on();
-      delay(130);
-      ImpulseFader1.off();
+      DeflectorFader1.off();
+      delay(5);
       ImpulseFader2.on();
-      delay(130);
-      NacelleFader1.off();
+      ImpulseFader1.off();
+      delay(5);
       NacelleFader2.on();
+      NacelleFader1.off();
       break;
 
     case eFourth:
-      RunningLightFader2.off();
       RunningLightFader3.on();
-      delay(130);
-      DeflectorFader2.off();
+      RunningLightFader2.off();
+      delay(5);
       DeflectorFader3.on();
-      delay(130);
-      ImpulseFader2.off();
+      DeflectorFader2.off();
+      delay(5);
       ImpulseFader3.on();
-      delay(130);
-      NacelleFader2.off();
+      ImpulseFader2.off();
+      delay(5);
       NacelleFader3.on();
+      NacelleFader2.off();
       break;
 
     case eFifth:
