@@ -1,0 +1,255 @@
+// The Enterprise
+
+#include <LedFader.h>
+#include <LedFlasher.h>
+
+// pin assignments
+const byte StrobesPin = 13;
+const byte NavigationPin = 12;
+const byte DeflectorbluePin = 11;   // PWM
+const byte DeflectororangePin = 10;    // PWM
+const byte NacellsbluePin = 9;      // PWM
+const byte ShuttlebayPin = 8;
+const byte DoorsPin = 7;
+const byte NacellsvioletPin = 6;   // PWM
+const byte ImpulseorangePin = 5;  // PWM
+const byte TorpedoPin = 4;
+const byte ImpulseredPin = 3;   // PWM
+const byte RCSPin = 2; 
+const byte CabinPin = 1;
+
+// Faders                           pin           min  max  millis    on?    stop?
+LedFader impulseredFader      (ImpulseredPin,      0,   40,  3000,   false,  true);
+LedFader impulseorangeFader   (ImpulseorangePin,   0,   40,  3000,   false,  true);
+LedFader deflectororangeFader (DeflectororangePin, 0,   40,  3000,   false,  true);
+LedFader deflectorblueFader   (DeflectorbluePin,   0,   40,  3000,   false,  true);
+LedFader nacellsvioletFader   (NacellsvioletPin,   0,   40,  3000,   false,  true);
+LedFader nacellsblueFader     (NacellsbluePin,     0,   40,  3000,   false,  true);
+
+// Flashers                pin          off-time  on-time       on?
+LedFlasher strobes    (StrobesPin,        900,       100,     false);
+LedFlasher navigation (NavigationPin,     2900,      100,     false);
+
+// states for the state machine
+typedef enum
+  {
+  initialState,
+  wantCabin,                 // ALWAYS ON
+  wantRCS,                   // ALWAYS ON
+  wantNavigation,            // ALWAYS ON
+  wantStrobes,               // ALWAYS ON
+  wantTorpedostartup,        // ALWAYS ON  
+  wantDeflectororangestartup,// Startup mode
+  wantShuttleBaystartup,     // Startup mode
+  wantImpulseorangestartup,  // Startup mode
+  wantNacellvioletstartup,   // Startup mode
+  wantDeflectororangeon,     // Impulse mode
+  wantDeflectorblueoff,      // Impulse mode
+  wantNacellsvioleton,       // Impulse mode
+  wantNacellsblueoff,        // Impulse mode
+  wantImpulseredon,          // Impulse mode
+  wantImpulseorangeoff,      // Impulse mode
+  wantShuttleBayon,          // Impulse mode
+  wantTorpedoon,             // Impulse mode
+  wantDeflectorblueoffreturn,// Impulse mode return
+  wantNacellsblueoffreturn,  // Impulse mode return
+  wantDeflectorblueon,       // Warp mode
+  wantDeflectororangeoff,    // Warp mode
+  wantNacellsblueon,         // Warp mode
+  wantNacellsvioletoff,      // Warp mode
+  wantImpulseorangeon,       // Warp mode
+  wantImpulseredoff,         // Warp mode
+  wantShuttleBayoff,         // Warp mode
+  wantTorpedooff,            // Warp mode
+    
+  } states;
+
+// state machine variables
+states state = initialState;
+unsigned long lastStateChange = 0;
+unsigned long timeInThisState = 1000;
+
+void setup ()
+  {
+  pinMode (CabinPin, OUTPUT);
+  pinMode (RCSPin, OUTPUT);
+  pinMode (ShuttlebayPin, OUTPUT);
+  pinMode (NavigationPin, OUTPUT);
+  pinMode (StrobesPin, OUTPUT);
+  pinMode (TorpedoPin, OUTPUT);
+  
+  // set up faders, flashers  
+  impulseorangeFader.begin ();
+  impulseredFader.begin ();
+  deflectororangeFader.begin ();
+  deflectorblueFader.begin ();
+  nacellsvioletFader.begin ();
+  nacellsblueFader.begin ();
+  strobes.begin ();
+  navigation.begin ();
+  }  // end of setup
+        
+void doStateChange ()
+  {
+  lastStateChange = millis ();    // when we last changed states
+  timeInThisState = 1000;         // default one second between states
+
+  switch (state)
+   {
+    case initialState:
+         state = wantCabin;
+         break;
+         
+    case wantCabin:
+         digitalWrite (CabinPin, HIGH);
+         state = wantRCS;
+         break;
+         
+    case wantRCS:
+         digitalWrite (RCSPin, HIGH);
+         state = wantDeflectororangestartup;
+         break;
+         
+    case wantDeflectororangestartup:
+         deflectororangeFader.on();
+         state = wantImpulseorangestartup;
+         break;
+         
+    case wantImpulseorangestartup:
+         impulseorangeFader.on();
+         state = wantNacellvioletstartup;
+         break;
+         
+    case wantNacellvioletstartup:
+         nacellsvioletFader.on();
+         state = wantShuttleBaystartup;
+         break;
+//doors open here         
+    case wantShuttleBaystartup:
+         digitalWrite (ShuttlebayPin, HIGH);
+         state = wantStrobes;
+         break;
+         
+    case wantStrobes:
+         strobes.on();
+         state = wantNavigation;
+         break;
+         
+    case wantNavigation:
+         navigation.on();
+         state = wantTorpedostartup;
+         break;
+         
+    case wantTorpedostartup:
+         digitalWrite (TorpedoPin, HIGH);
+         state = wantImpulseorangeoff;              
+         timeInThisState = 600000;
+         break;
+         
+//impulse mode
+    case wantImpulseorangeoff:
+         impulseorangeFader.off();
+         state = wantImpulseredon;
+         break;
+         
+    case wantImpulseredon:
+         impulseredFader.on();
+         state = wantDeflectorblueoffreturn;
+         break;
+         
+    case wantDeflectorblueoffreturn:
+         deflectorblueFader.off();
+         state = wantDeflectororangeon;
+         break;
+         
+    case wantDeflectororangeon:
+         deflectororangeFader.on();
+         state = wantNacellsblueoffreturn;
+         break;
+         
+    case wantNacellsblueoffreturn:
+         nacellsblueFader.off();
+         state = wantNacellsvioleton;
+         break;
+         
+    case wantNacellsvioleton:
+         nacellsvioletFader.on();
+         state = wantShuttleBayon;
+         break;
+//doors need to open here         
+    case wantShuttleBayon:
+         digitalWrite (ShuttlebayPin, HIGH);
+         state = wantTorpedoon;
+         break;
+         
+    case wantTorpedoon:
+         digitalWrite (TorpedoPin, HIGH);
+         state = wantImpulseredoff;
+         
+         timeInThisState = 600000;  
+         break;
+         
+//warp mode         
+   case wantImpulseredoff:
+        impulseredFader.off();
+        state = wantImpulseorangeon;
+        break;
+        
+   case wantImpulseorangeon:
+        impulseorangeFader.on();
+        state = wantDeflectororangeoff;
+        break;
+        
+   case wantDeflectororangeoff:
+        deflectororangeFader.off();
+        state = wantDeflectorblueon;
+        break;
+        
+   case wantDeflectorblueon:
+        deflectorblueFader.on();
+        state = wantNacellsvioletoff;
+        break;
+   
+   case wantNacellsvioletoff:
+        nacellsvioletFader.off();
+        state = wantNacellsblueon;
+        break;
+        
+   case wantNacellsblueon:
+        nacellsblueFader.on();
+        state = wantShuttleBayoff;
+        break;
+//doors need to close here        
+   case wantShuttleBayoff:
+        digitalWrite(ShuttlebayPin, LOW);
+        state = wantTorpedooff;
+        break;
+        
+   case wantTorpedooff:
+        digitalWrite(TorpedoPin, LOW);
+        state = wantImpulseorangeoff;
+   timeInThisState = 600000;     
+         // what next?
+         break;
+         
+    
+         
+    }  // end of switch on state
+  }  // end of doStateChange
+
+
+void loop ()
+  {
+   if (millis () - lastStateChange >= timeInThisState)
+     doStateChange ();
+   // update faders, flashers
+   impulseorangeFader.update ();
+   impulseredFader.update ();
+   deflectororangeFader.update ();
+   deflectorblueFader.update ();
+   nacellsvioletFader.update ();
+   nacellsblueFader.update ();
+   navigation.update ();
+   strobes.update ();
+  // other stuff here like testing switches
+  }  // end of loop
