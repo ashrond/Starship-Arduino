@@ -53,7 +53,7 @@ LedFlasher Navigation (NavigationPin, 2300, 600,  true);
 enum eLightStates { eOff = 0, eFirst, eSecond, eThird, eFourth, eFifth, eMaxState };
 
 void setup() {
-MODE = 0; buttonState = 0; lastButtonState = 0;
+  MODE = 0; buttonState = 0; lastButtonState = 0;
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode (RunningLightPin, OUTPUT);
   pinMode (DeflectorPin, OUTPUT);
@@ -99,7 +99,7 @@ void loop() {
 
   //Setup Case
   // if ( eOff < MODE && MODE < eMaxState ) {
- if (buttonState != lastButtonState) {
+  if (buttonState != lastButtonState) {
     if (MODE == eMaxState) {
       MODE = eFirst;
     }
@@ -107,52 +107,45 @@ void loop() {
     lastButtonState = buttonState;
     return;
   }
-  
+
   switch (MODE) {
     case eFirst:
-      digitalWrite(TestPin,LOW); 
+      digitalWrite(TestPin, LOW);
       delay(10);
       break;
 
     case eSecond:
       RunningLightFader1.on();
-      delay(130);
       DeflectorFader1.on();
-      delay(130);
       ImpulseFader1.on();
-      delay(130);
       break;
 
     case eThird:
-      RunningLightFader2.on();
       RunningLightFader1.off();
-      delay(5);
-      DeflectorFader2.on();
       DeflectorFader1.off();
-      delay(5);
-      ImpulseFader2.on();
       ImpulseFader1.off();
-      delay(5);
-      NacelleFader2.on();
       NacelleFader1.off();
+      delay(5);
+      RunningLightFader2.on();
+      DeflectorFader2.on();
+      ImpulseFader2.on();
+      NacelleFader2.on();
       break;
 
     case eFourth:
-      RunningLightFader3.on();
       RunningLightFader2.off();
-      delay(5);
-      DeflectorFader3.on();
       DeflectorFader2.off();
-      delay(5);
-      ImpulseFader3.on();
       ImpulseFader2.off();
-      delay(5);
-      NacelleFader3.on();
       NacelleFader2.off();
+      delay(5);
+      RunningLightFader3.on();
+      DeflectorFader3.on();
+      ImpulseFader3.on();
+      NacelleFader3.on();
       break;
 
     case eFifth:
-      digitalWrite(TestPin,HIGH); 
+      digitalWrite(TestPin, HIGH);
       RunningLightFader1.off();
       RunningLightFader2.off();
       RunningLightFader3.off();
@@ -168,8 +161,6 @@ void loop() {
       break;
 
     default:
-      //  this should never happen however a good safety just to turn on the lights for safety
-      //  hardware, memory corruption could happen.  Let's make it same as case high beam
       RunningLightFader1.off();
       RunningLightFader2.off();
       RunningLightFader3.off();
@@ -183,7 +174,6 @@ void loop() {
       NacelleFader2.off();
       NacelleFader3.off();
       break;
-      //  }
   }
   lastButtonState = buttonState;
   MODE = MODE + 1;
