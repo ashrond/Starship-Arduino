@@ -3,8 +3,8 @@
 // Arduino Code for Uno
 // Version: Alpha
 // Git Repo: https://github.com/ashrond/Starship-Arduino/tree/master/Starship_Arduino
-linw
-// Additional libraries needed from:  https://github.com/wilsonb/arduino/tree/master/libraries
+
+// Additional libraries obtained from:  https://github.com/wilsonb/arduino/tree/master/libraries
 #include <LedFader.h>
 #include <LedFlasher.h>
 
