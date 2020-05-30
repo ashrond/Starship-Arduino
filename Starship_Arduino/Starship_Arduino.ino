@@ -1,14 +1,16 @@
-// Version 36
-// Starship Model Light control for Arduino
+// Starship Arduino
+// Model Light control Program
 // Arduino Code for Uno
-// Additional libraries needed from:  https://github.com/wilsonb/arduino/tree/master/libraries
+// Version: Alpha
+// Git Repo: https://github.com/ashrond/Starship-Arduino/tree/master/Starship_Arduino
 
+// Additional libraries needed from:  https://github.com/wilsonb/arduino/tree/master/libraries
 #include <LedFader.h>
 #include <LedFlasher.h>
 
 //Pin Assignments
 //NOTE: if modifying or altering, verrify that the connected pin is PWM if fading is desired or else fading will not work
-const byte ModePin = 8;
+const byte ModePin = A5;
 const byte StrobesPin = 7;
 const byte NavigationPin = 2;
 const byte RunningLightPin = 9;   // (PWM)
