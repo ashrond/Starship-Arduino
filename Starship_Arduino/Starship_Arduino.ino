@@ -3,7 +3,7 @@
 // Arduino Code for Uno
 // Version: Alpha
 // Git Repo: https://github.com/ashrond/Starship-Arduino/tree/master/Starship_Arduino
-//Considder adding in chasing led effect from : https://www.youtube.com/watch?v=6AF2it9XEIQ
+// Considder adding in chasing led effect from : https://www.youtube.com/watch?v=6AF2it9XEIQ
 // Additional libraries obtained from:  https://github.com/wilsonb/arduino/tree/master/libraries
 #include <LedFader.h>
 #include <LedFlasher.h>
